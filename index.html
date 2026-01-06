@@ -5,30 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>same-sqri0o8grd0</title>
     <style>
-      body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; margin: 40px; color: #222; }
-      header { display:flex; align-items:center; gap:16px; }
-      header img { width:80px; height:80px; }
-      main { margin-top:20px; max-width:720px; line-height:1.6; }
-      a.button { display:inline-block; margin-top:12px; padding:8px 12px; background:#1f77b4; color:#fff; text-decoration:none; border-radius:6px; }
+      :root{--bg:#ffffff;--card:#fff;--muted:#6b7280;--accent:#1f77b4}
+      *{box-sizing:border-box}
+      body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; margin: 40px; color: #111; background: linear-gradient(180deg,#f7fbff 0%, #ffffff 100%); }
+      .wrap{max-width:900px;margin:0 auto;padding:24px}
+      .card{background:var(--card);border-radius:16px; padding:28px; box-shadow: 0 8px 30px rgba(31,119,180,0.10); display:flex; gap:24px; align-items:center; transform: translateY(0); transition: transform 220ms cubic-bezier(.2,.9,.3,1), box-shadow 220ms;}
+      .card:hover{transform: translateY(-8px) scale(1.01); box-shadow: 0 20px 50px rgba(31,119,180,0.14);} 
+      .logo-wrap{width:120px;height:120px;flex:0 0 120px;display:flex;align-items:center;justify-content:center;}
+      .content{flex:1}
+      h1{font-size:20px;margin:0;color:#0f172a;font-weight:800;letter-spacing:-0.2px}
+      p.lead{margin:12px 0 0;color:var(--muted);font-size:15px}
+      .meta{margin-top:14px}
+      a.button{display:inline-block;background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700}
+      /* 3D tilt interaction */
+      .card.tilt{transform: perspective(800px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0);} 
+      @media (max-width:600px){.card{flex-direction:column;align-items:flex-start}.logo-wrap{width:96px;height:96px}}
     </style>
   </head>
   <body>
-    <header>
-      <img src="assets/logo.svg" alt="Logo">
-      <div>
-        <h1 style="margin:0">same-sqri0o8grd0-latest.netlify.app</h1>
-        <small>Creative chronicles</small>
+    <div class="wrap">
+      <div class="card" id="card">
+        <div class="logo-wrap">
+          <img src="assets/logo.svg" alt="site logo" width="96" height="96" style="display:block">
+        </div>
+        <div class="content">
+          <h1>same-sqri0o8grd0-latest.netlify.app</h1>
+          <p class="lead"><strong>Creative chronicles</strong></p>
+          <p class="meta">A small site deployed on Netlify. This repository contains the source and deployment for same-sqri0o8grd0-latest.netlify.app.</p>
+          <p><a class="button" href="docs/README.md">Project documentation</a></p>
+        </div>
       </div>
-    </header>
+    </div>
 
-    <main>
-      <p>A small site deployed on Netlify. This repository contains the source and deployment for same-sqri0o8grd0-latest.netlify.app.</p>
-
-      <p>
-        <a class="button" href="docs/README.md">Project documentation</a>
-      </p>
-    </main>
-
-    <script src="src/main.js"></script>
+    <script>
+      // Make the card respond with a subtle 3D tilt on pointer move
+      (function(){
+        const card = document.getElementById('card');
+        let rect = null;
+        function onMove(e){
+          if(!rect) rect = card.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          const ry = (x * 12).toFixed(2) + 'deg';
+          const rx = (-y * 10).toFixed(2) + 'deg';
+          card.style.setProperty('--rx', rx);
+          card.style.setProperty('--ry', ry);
+          card.classList.add('tilt');
+        }
+        function onLeave(){ card.style.removeProperty('--rx'); card.style.removeProperty('--ry'); card.classList.remove('tilt'); rect = null }
+        card.addEventListener('pointermove', onMove);
+        card.addEventListener('pointerleave', onLeave);
+        card.addEventListener('pointercancel', onLeave);
+      })();
+    </script>
   </body>
 </html>
